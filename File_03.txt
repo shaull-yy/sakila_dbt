@@ -1,1 +1,3 @@
 First line on file 03
+line 2
+line 3
