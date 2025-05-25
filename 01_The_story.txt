@@ -1,0 +1,11 @@
+1. File_01.txt dev - create filr for the first time with 1 line. commit it
+2. File_02.txt dev - create filr for the first time with 1 line. commit it
+3. File_03.txt dev - create filr for the first time with 1 line. commit it
+
+4. merge all files to main at one go
+5. File_01, dev - add line # 2. commit it
+6. File_02, dev - add line #2. commit it
+7. merge to main by selecting the commit hash of file_01  -- Check if file_01 & were merged, or just file_01 
+
+9. File_03.txt main - add line #2 and 3. do commit
+10. File_03, dev - change lin1 by adding 'change in dev'
