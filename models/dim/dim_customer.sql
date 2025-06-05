@@ -5,7 +5,7 @@
 }}  
 
 select 
-	c.first_name || ' ' || c.last_name as cust_name
+	{{macro_concat('c.first_name', 'c.last_name') }} as cust_name  -- c.first_name || ' ' || c.last_name as cust_name
 	,split_part(email, '@', 2) AS domain_name
 	,ci.city
 	,case 
