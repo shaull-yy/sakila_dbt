@@ -1,0 +1,13 @@
+
+version: 2
+
+models:
+
+  - name: fact_rental
+    description: "Rental & payment details"
+    columns:
+      - name: rental_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
