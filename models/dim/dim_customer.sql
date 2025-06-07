@@ -1,7 +1,7 @@
 {{
 	config(
 		   uniqu_key = 'customer_id',
-		   post_hook = macro_z_refresh_from(this)
+		   post_hook = "{{manual_refresh(this)}}"
 		  )
 }}  
 
