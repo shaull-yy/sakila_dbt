@@ -33,11 +33,12 @@ models:
   sakila_dbt:
     # Config indicated by + and applies to all files under models/example/
     example:
-      +materialized: incremental
+      +materialized: view
       +schema: example
-      +enabled: false
+      +enabled: true
     dim:
       +materialized: incremental
+      +pre-hook: delete from {{this}}
       +schema: dim
     fact:
       +materialized: incremental
