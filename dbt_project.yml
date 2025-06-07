@@ -38,6 +38,7 @@ models:
       +enabled: true
     dim:
       +materialized: incremental
+      +pre-hook: delete from {{this}}
       +schema: dim
     fact:
       +materialized: incremental

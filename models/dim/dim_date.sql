@@ -1,8 +1,3 @@
-{{
-  config(
-    unique_key = 'date_dim_id'
-    )
-}}
 
 with dates as (
 SELECT
@@ -50,7 +45,4 @@ from
 dates
 where
 date_key <= CURRENT_DATE
-{% if is_incremental() %}
-  and {{this}}.date_dim_id >= coalesce((select max(date_dim_id) from {{ this }}), '1900-01-01')
-{% endif %}
 order by date_dim_id asc
