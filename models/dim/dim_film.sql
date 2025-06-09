@@ -1,9 +1,23 @@
 
+{{
+	config(
+		   uniqu_key = 'film_id',
+		   pre_hook = "{{log_model('start')}}",
+		   post_hook = ["{{manual_refresh(this)}}", "{{log_model('end')}}"]
+		  )
+}} 
 
 select
 	f.*
+	,case when f.length <= 75 then 'short'
+		when f.length <= 120 then 'medium'
+		else 'long'
+	end as length_desc
 	,c."name" as category_name
-	,l."name" as language
+	,l."name" as "language"
+	,{{coalesces_id('fc', 'film_id', 'cat')}}
+	,{{coalesces_id('c', 'category_id', 'cat')}}
+	,{{coalesces_id('l', 'language_id', 'lang')}}
 FROM {{ source('stg', 'film') }}    as f
 left join {{ source('stg', 'film_cat') }} as fc   on f.film_id = fc.film_id
 left join {{ source('stg', 'cat') }}      as c    on fc.category_id  = c.category_id

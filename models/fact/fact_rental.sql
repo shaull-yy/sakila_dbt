@@ -1,7 +1,9 @@
+
 {{
   config(
 	unique_key = 'rental_id',
-	post_hook = "{{manual_refresh(this)}}"
+	pre_hook = "{{log_model('start')}}",
+	post_hook = ["{{manual_refresh(this)}}", "{{log_model('end')}}"]
 	)
 }}
 
@@ -13,16 +15,23 @@ with refresh_date as (
 )
 SELECT
 	r.*
-	,p.payment_id 
-	,p.staff_id as pay_stuff_id
-	,p.amount
-	,p.payment_date
+	,to_char(r.rental_date, 'YYYYMMDD')::integer as date_key
+	,round(EXTRACT(EPOCH FROM (r.return_date - r.rental_date)) / 3600.0, 1) as rent_duration_hr
+	,case when r.return_date is null then 0
+		else 1
+	end as is_return
+	,i.film_id
+	,i.store_id
+	,{{coalesces_id('i', 'inventory_id', 'inventory')}}
+	,{{coalesces_id('cust', 'customer_id', 'cust')}}
+	,{{coalesces_id('s', 'store_id', 'store')}}
 FROM {{ source('stg', 'rental') }}          as r
 left join {{ source('stg', 'inventory') }}  as i   on i.inventory_id = r.inventory_id 
-left join {{ source('stg', 'payment') }}    as p   on r.rental_id  = p.rental_id 
+left join {{ source('stg', 'cust') }}       as cust on r.customer_id = cust.customer_id
+left join {{ source('stg', 'store') }}      as s    on i.store_id = s.store_id
 {% if is_incremental() %}
   where r.last_update >= coalesce(
 		(select from_date from refresh_date),
-		 select max(last_update) from {{ this }}), 
-		 '1900-01-01')
+		(select max(last_update) from {{ this }}), 
+		'1900-01-01')
 {% endif %}

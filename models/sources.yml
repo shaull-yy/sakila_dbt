@@ -8,6 +8,7 @@ sources:
       identifier: customer
     - name: address
     - name: city
+    - name: country
     - name: film
     - name: film_cat
       identifier: film_category
