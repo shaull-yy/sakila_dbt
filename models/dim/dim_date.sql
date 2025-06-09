@@ -1,3 +1,10 @@
+{{
+	config(
+		   uniqu_key = 'date_key',
+		   pre_hook = "{{log_model('start')}}",
+		   post_hook = ["{{manual_refresh(this)}}", "{{log_model('end')}}"]
+		  )
+}}  
 
 with dates as (
 SELECT
