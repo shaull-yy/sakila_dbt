@@ -2,7 +2,9 @@
 	config(
 		   uniqu_key = 'customer_id',
 		   pre_hook = "{{log_model('start')}}",
-		   post_hook = ["{{manual_refresh(this)}}", "{{log_model('end')}}"]
+		   post_hook = ["{{manual_refresh(this)}}", "{{log_model('end')}}"],
+		   indexes= [{'columns': ['create_date']}],
+		   identifier = 'cust2'
 		  )
 }}  
 
@@ -26,6 +28,7 @@ select
 	,{{coalesces_id('a', 'address_id', 'address')}}
 	,{{coalesces_id('ci', 'city_id', 'city')}}
 	,{{coalesces_id('co', 'country_id', 'country')}}
+	,'{{ run_started_at }}'::timestamp AT TIME ZONE 'UTC' as etl_time_utc
 from {{ source('stg', 'cust') }} as c
 	left join {{ source('stg', 'address') }} as a   on c.address_id = a.address_id
 	left join {{ source('stg', 'city') }}    as ci  on a.city_id  = ci.city_id

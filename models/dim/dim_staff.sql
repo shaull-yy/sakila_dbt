@@ -14,5 +14,6 @@ select
 	,case when stf.active = true then 'yes'
 		else 'no'
 	end as active_desc
+	,'{{ run_started_at }}'::timestamp AT TIME ZONE 'UTC' as etl_time_utc
 from {{ source('stg', 'staff') }} stf 
 

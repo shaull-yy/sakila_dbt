@@ -16,6 +16,7 @@ select
 	,coalesce(add.address_id, -1) address_add_id
 	,coalesce(cit.city_id, -1) city_city_id
 	,coalesce(cnt.country_id, -1) country_country_id
+	,'{{ run_started_at }}'::timestamp AT TIME ZONE 'UTC' as etl_time_utc
 from {{ source('stg', 'store') }} str 
 left join {{ source('stg', 'staff') }}   as stf  on str.manager_staff_id = stf.staff_id 
 left join {{ source('stg', 'address') }} as add  on str.address_id  =  add.address_id

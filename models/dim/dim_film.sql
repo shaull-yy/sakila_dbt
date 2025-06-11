@@ -18,6 +18,7 @@ select
 	,{{coalesces_id('fc', 'film_id', 'cat')}}
 	,{{coalesces_id('c', 'category_id', 'cat')}}
 	,{{coalesces_id('l', 'language_id', 'lang')}}
+	,'{{ run_started_at }}'::timestamp AT TIME ZONE 'UTC' as etl_time_utc
 FROM {{ source('stg', 'film') }}    as f
 left join {{ source('stg', 'film_cat') }} as fc   on f.film_id = fc.film_id
 left join {{ source('stg', 'cat') }}      as c    on fc.category_id  = c.category_id
