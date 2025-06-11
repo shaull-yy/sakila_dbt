@@ -48,6 +48,7 @@ FROM (SELECT '2000-01-01'::DATE + SEQUENCE.DAY AS datum
 )
 select
 *
+,'{{ run_started_at }}'::timestamp AT TIME ZONE 'UTC' as etl_time_utc
 from
 dates
 where

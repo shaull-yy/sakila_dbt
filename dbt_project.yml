@@ -10,6 +10,7 @@ profile: 'sakila_dbt'
 
 vars:
   init_date: '1900-01-01'
+  schema_prefix: 'dwh_'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -27,11 +28,11 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 on-run-start:
   - create schema if not exists dwh;
-  - create schema if not exists dwh_dim;
-  - create schema if not exists dwh_fact;
-  - create schema if not exists dwh_seed;
-  - create table if not exists dwh.dbt_log (id varchar(50), model varchar(50), start_date TIMESTAMP,	end_date TIMESTAMP,	run_duration INTERVAL, run_dur_sec integer);
-  - insert into dwh.dbt_log (id, model, start_date, end_date, run_duration, run_dur_sec) values('{{ invocation_id}}', null, now(), null, null, null);
+#  - create schema if not exists dwh_dim;
+#  - create schema if not exists dwh_fact;
+#  - create schema if not exists dwh_seed;
+  - create table if not exists dwh.dbt_log (id varchar(50), model varchar(50), start_date TIMESTAMP,	end_date TIMESTAMP,	run_duration INTERVAL, run_dur_sec integer, etl_date_utc TIMESTAMP);
+  - insert into dwh.dbt_log (id, model, start_date, end_date, run_duration, run_dur_sec, etl_date_utc) values('{{ invocation_id}}', null, '{{ run_started_at }}'::timestamp, null, null, null, '{{ run_started_at }}'::timestamp);
 
 on-run-end:
   - update dwh.dbt_log set end_date = now(), run_duration = now() - start_date, run_dur_sec = EXTRACT(EPOCH FROM (now() - start_date)) where id = '{{ invocation_id}}';
@@ -55,5 +56,6 @@ models:
     fact:
       +materialized: incremental
       +schema: fact
-    seeds:
-      +schema: seed
+seeds:
+  sakila_dbt:
+    +schema: seed

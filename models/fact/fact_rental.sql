@@ -25,6 +25,7 @@ SELECT
 	,{{coalesces_id('i', 'inventory_id', 'inventory')}}
 	,{{coalesces_id('cust', 'customer_id', 'cust')}}
 	,{{coalesces_id('s', 'store_id', 'store')}}
+	,'{{ run_started_at }}'::timestamp AT TIME ZONE 'UTC' as etl_time_utc
 FROM {{ source('stg', 'rental') }}          as r
 left join {{ source('stg', 'inventory') }}  as i   on i.inventory_id = r.inventory_id 
 left join {{ source('stg', 'cust') }}       as cust on r.customer_id = cust.customer_id

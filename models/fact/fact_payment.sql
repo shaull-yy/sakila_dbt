@@ -15,6 +15,7 @@ with refresh_date as (
 )
 SELECT
 	p.*
+	,'{{ run_started_at }}'::timestamp AT TIME ZONE 'UTC' as etl_time_utc
 FROM {{ source('stg', 'payment') }}    as p
 {% if is_incremental() %}
   where p.payment_date >= coalesce(

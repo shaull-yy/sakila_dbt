@@ -1,0 +1,34 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "echo",
+			"type": "shell",
+			"command": "echo Hello"
+		},
+		{
+            "label": "sync_mark_repo",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "if (Test-Path 'c:/_Shaul/Projects/_HackerU/dbt_proj/mark_repo') { Set-Location 'c:/_Shaul/Projects/_HackerU/dbt_proj/mark_repo'; Write-Host '> Current working directory:' -ForegroundColor Yellow; Get-Location; git pull mark_remote main; if ($?) { Write-Host '> Git pull completed successfully' -ForegroundColor Green; if (Test-Path 'c:/_Shaul/Projects/_HackerU/dbt_proj/sakila_dbt') { Set-Location 'c:/_Shaul/Projects/_HackerU/dbt_proj/sakila_dbt'; Write-Host '> Current working directory:' -ForegroundColor Yellow; Get-Location } else { Write-Host '> sakila_dbt directory does not exist' -ForegroundColor Red } } else { Write-Host '> Git pull failed' -ForegroundColor Red } } else { Write-Host '> mark_repo directory does not exist' -ForegroundColor Red }"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        }
+	]
+}
