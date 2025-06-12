@@ -31,11 +31,11 @@ on-run-start:
 #  - create schema if not exists dwh_dim;
 #  - create schema if not exists dwh_fact;
 #  - create schema if not exists dwh_seed;
-  - create table if not exists dwh.dbt_log (id varchar(50), model varchar(50), start_date TIMESTAMP,	end_date TIMESTAMP,	run_duration INTERVAL, run_dur_sec integer, etl_date_utc TIMESTAMP);
-  - insert into dwh.dbt_log (id, model, start_date, end_date, run_duration, run_dur_sec, etl_date_utc) values('{{ invocation_id}}', null, '{{ run_started_at }}'::timestamp, null, null, null, '{{ run_started_at }}'::timestamp);
+  - create table if not exists dbt_log (id varchar(50), model varchar(50), start_date TIMESTAMP,	end_date TIMESTAMP,	run_duration INTERVAL, run_dur_sec integer, etl_date_utc TIMESTAMP);
+  - insert into dbt_log (id, model, start_date, end_date, run_duration, run_dur_sec, etl_date_utc) values('{{ invocation_id}}', null, '{{ run_started_at }}'::timestamp, null, null, null, '{{ run_started_at }}'::timestamp);
 
 on-run-end:
-  - update dwh.dbt_log set end_date = now(), run_duration = now() - start_date, run_dur_sec = EXTRACT(EPOCH FROM (now() - start_date)) where id = '{{ invocation_id}}';
+  - update dbt_log set end_date = now(), run_duration = now() - start_date, run_dur_sec = EXTRACT(EPOCH FROM (now() - start_date)) where id = '{{ invocation_id}}' and model is null;
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 

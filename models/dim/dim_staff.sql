@@ -2,7 +2,7 @@
 	config(
 		   uniqu_key = 'staff_id',
 		   pre_hook = "{{log_model('start')}}",
-		   post_hook = ["{{manual_refresh(this)}}", "{{log_model('end')}}"]
+		   post_hook = ["{{log_model('end')}}"]
 		  )
 }}  
 
