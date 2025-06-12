@@ -3,9 +3,11 @@
 	config(
 		   uniqu_key = 'film_id',
 		   pre_hook = "{{log_model('start')}}",
-		   post_hook = ["{{manual_refresh(this)}}", "{{log_model('end')}}"]
+		   post_hook = ["{{log_model('end')}}"]
 		  )
 }} 
+
+{% set my_column_list = ['trailers', 'deleted scenes', 'behind the scenes', 'commentaries'] %}
 
 select
 	f.*
@@ -15,9 +17,9 @@ select
 	end as length_desc
 	,c."name" as category_name
 	,l."name" as "language"
-	,{{coalesces_id('fc', 'film_id', 'cat')}}
-	,{{coalesces_id('c', 'category_id', 'cat')}}
-	,{{coalesces_id('l', 'language_id', 'lang')}}
+	{% for feature in my_column_list %}
+	,case when special_features  ilike '%{{ feature }}%' then 1 else 0 end "is_{{feature}}"
+	{% endfor %}
 	,'{{ run_started_at }}'::timestamp AT TIME ZONE 'UTC' as etl_time_utc
 FROM {{ source('stg', 'film') }}    as f
 left join {{ source('stg', 'film_cat') }} as fc   on f.film_id = fc.film_id
