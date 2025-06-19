@@ -3,7 +3,7 @@
 	config(
 		   uniqu_key = 'film_id',
 		   pre_hook = "{{log_model('start')}}",
-		   post_hook = ["{{log_model('end')}}"]
+		   post_hook = ["{{log_model('end')}}", "insert into {{ this }} (film_id, title, release_year) values (-1,'NA', 1990)"]
 		  )
 }} 
 

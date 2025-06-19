@@ -2,7 +2,7 @@
 	config(
 		   uniqu_key = 'staff_id',
 		   pre_hook = "{{log_model('start')}}",
-		   post_hook = ["{{log_model('end')}}"]
+		   post_hook = ["{{log_model('end')}}", "insert into {{ this }} (staff_id, first_name, last_name) values (-1,'NA', 'NA')"]
 		  )
 }}  
 
