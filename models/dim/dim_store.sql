@@ -2,7 +2,7 @@
 	config(
 		   uniqu_key = 'store_id',
 		   pre_hook = "{{log_model('start')}}",
-		   post_hook = ["{{log_model('end')}}"]
+		   post_hook = ["{{log_model('end')}}", "insert into {{ this }} (store_id, city, country) values (-1,'NA', 'NA')"]
 		  )
 }}  
 

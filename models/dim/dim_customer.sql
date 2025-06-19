@@ -2,7 +2,7 @@
 	config(
 		   uniqu_key = 'customer_id',
 		   pre_hook = "{{log_model('start')}}",
-		   post_hook = ["{{log_model('end')}}"],
+		   post_hook = ["{{log_model('end')}}", "insert into {{ this }} (customer_id, city, active_ind, country) values (-1,'NA', 'yes', 'NA')"],
 		   indexes= [{'columns': ['create_date']}]
 		  )
 }}  
