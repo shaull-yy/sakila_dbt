@@ -13,11 +13,13 @@ with refresh_date as (
 	where   table_name = '{{this}}'
 		and to_refresh = 1
 ),
+{% if is_incremental() %}
 null_cust as (
 	select rental_id
 	from {{this}}
 	where customer_id = -1
 ),
+{% endif %}
 base_rental as (
 	SELECT
 	r.rental_id
