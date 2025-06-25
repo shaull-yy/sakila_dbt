@@ -51,6 +51,9 @@ models:
       +materialized: incremental
       +pre-hook: "{{ delete_from() }}"  #delete from {{this}}
       +schema: dim
+      dim_incremental:
+        +materialized: incremental
+        +schema: dim
     fact:
       +materialized: incremental
       +schema: fact
